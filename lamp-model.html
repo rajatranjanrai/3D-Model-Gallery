@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lamp</title>
+    <link rel="icon" type="image/x-icon" href="/img/logo resonance3D.png">
+    <script async type="module" src="https://unpkg.com/@google/model-viewer"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: black;
+        }
+        #model-viewer-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+        }
+        nav img {
+            width: 100px;
+        }
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            nav img {
+                width: 80px;
+            }
+        }
+        @media screen and (max-width: 576px) {
+            nav img {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <img src="/img/Resonance_logo_Red_CROP.png" alt="Logo">
+</nav>
+
+<div id="model-viewer-container">
+    <model-viewer
+        id="model-viewer"
+        src="/3D Models/Lamp.glb"
+        alt="A 3D model"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        exposure="1"
+        shadow-intensity="3"
+        interaction-prompt="auto"
+        interaction-policy="allow-when-focused"
+        auto-rotate
+        auto-rotate-delay="2000ms"
+        loading="lazy"
+        style="width: 80%; height: 80%;"
+        annotations='[
+            {
+                "position": "1m 0 0",
+                "title": "Annotation 1",
+                "description": "This is the first annotation."
+            },
+            {
+                "position": "0 1m 0",
+                "title": "Annotation 2",
+                "description": "This is the second annotation."
+            }
+        ]'
+        hotspots='[
+            {
+                "position": "1m 1m 0",
+                "title": "Hotspot 1",
+                "detail": "This is hotspot 1."
+            },
+            {
+                "position": "-1m -1m 0",
+                "title": "Hotspot 2",
+                "detail": "This is hotspot 2."
+            }
+        ]'
+        animation-name="spin"
+        animation-interruptible
+        interaction-prompt="auto"
+        interaction-policy="allow-when-focused"
+        autoplay
+        autoplay-delay="1000ms"
+        auto-rotate
+        auto-rotate-delay="2000ms"
+        loading="lazy"
+        style="width: 80%; height: 80%;">
+    <script type="application/json" id="animation-script">
+        {
+            "name": "spin",
+            "keyframes": [
+                { "transform": "rotateY(0deg)" },
+                { "transform": "rotateY(360deg)" }
+            ],
+            "options": {
+                "duration": "3000",
+                "iterations": "infinite"
+            }
+        }
+    </script>
+    </model-viewer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modelViewer = document.getElementById('model-viewer');
+
+        modelViewer.addEventListener('load', () => {
+            if (!document.fullscreenElement) {
+                modelViewer.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            }
+        });
+    });
+</script>
+<!-- async function populateDropdown() {
+    try {
+        // Fetch all elements with class 'qr-container' from index.html
+        const qrContainers = document.querySelectorAll('.qr-container');
+
+        const dropdown = document.getElementById('qrCodeDropdown');
+
+        // Iterate over each qr-container element and extract its ID
+        qrContainers.forEach(container => {
+            const id = container.id;
+            // Create an option element for each ID and append it to the dropdown
+            const option = document.createElement('option');
+            option.value = id;
+            option.text = id;
+            dropdown.appendChild(option);
+        });
+
+        // Display the QR code image for the initially selected ID
+        const selectedId = dropdown.value;
+        displaySelectedImage(selectedId);
+    } catch (error) {
+        console.error('Error fetching IDs:', error);
+    }
+}
+
+// Event listener for dropdown click
+document.getElementById('qrCodeDropdown').addEventListener('click', function() {
+    try {
+        // Fetch all elements with class 'qr-container' from index.html
+        const qrContainers = document.querySelectorAll('.qr-container');
+
+        const dropdown = document.getElementById('qrCodeDropdown');
+
+        // Clear existing options in the dropdown
+        dropdown.innerHTML = '';
+
+        // Iterate over each qr-container element and extract its ID
+        qrContainers.forEach(container => {
+            const id = container.id;
+            // Create an option element for each ID and append it to the dropdown
+            const option = document.createElement('option');
+            option.value = id;
+            option.text = id;
+            dropdown.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching IDs:', error);
+    }
+});
+
+// Function to display the QR code image for the selected ID
+function displaySelectedImage(selectedId) {
+    const imageUrl = `/path/to/qr_codes/${selectedId}.png`; // Replace with actual image URL
+    const imageBox = document.getElementById('selectedImageBox');
+    imageBox.innerHTML = `<img src="${imageUrl}" alt="Selected QR Code" class="selected-image">`;
+}
+
+// Event listener for dropdown click
+document.getElementById('qrCodeDropdown').addEventListener('click', function() {
+    // Fetch additional IDs and append them as options when the dropdown is clicked
+    const additionalIds = ['id4', 'id5', 'id6']; // Replace with actual additional IDs
+
+    const dropdown = document.getElementById('qrCodeDropdown');
+
+    // Append additional IDs as options
+    additionalIds.forEach(id => {
+        const option = document.createElement('option');
+        option.value = id;
+        option.text = id;
+        dropdown.appendChild(option);
+    });
+});
+
+// Event listener for dropdown change
+document.getElementById('qrCodeDropdown').addEventListener('change', function(event) {
+    const selectedId = event.target.value;
+    displaySelectedImage(selectedId);
+});
+
+// Initial population of dropdown and display of default QR code image
+window.onload = function() {
+    populateDropdown();
+};
+
+
+    function changeSelectedImage() {
+    const selectedId = document.getElementById('qrCodeDropdown').value;
+    const newlySelectedImageSrc = document.getElementById('newlySelectedImage').querySelector('img').src;
+
+    // Set a cookie with both image ID and image data, separated by a delimiter (:)
+    document.cookie = `newImageSrc=${selectedId}:${newlySelectedImageSrc}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+
+    window.location.href = 'index.html';
+}
+    function getImageUrl(selectedId) {
+        return `/WhiteQR/${selectedId}Qr.png`;
+    }
+
+    // Function to handle file input change for both dropdown and choose button
+    document.getElementById('qrCodeFileInput').addEventListener('change', function(event) {
+        const selectedFile = event.target.files[0]; // Get the selected file
+        if (selectedFile) {
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                const newlySelectedImageDiv = document.getElementById('newlySelectedImage');
+                newlySelectedImageDiv.innerHTML = `<strong>Newly Selected Image:</strong><br><img src="${reader.result}" alt="Selected Image" class="selected-image">`;
+            };
+
+            reader.readAsDataURL(selectedFile);
+        }
+    });
+
+    function changeSelectedImage() {
+    const newlySelectedImageSrc = document.getElementById('newlySelectedImage').querySelector('img').src;
+
+    // Set a cookie with the new image source
+    document.cookie = `newImageSrc=${newlySelectedImageSrc}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+
+    window.location.href = 'index.html';
+} -->
+
+
+</body>
+</html>
